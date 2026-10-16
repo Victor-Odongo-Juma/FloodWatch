@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head><title>FloodWatch</title></head>
+<body>
+<h1>FloodWatch Tana River Loading...</h1>
+<script type="module">
+fetch('/').then(r=>r.json()).then(d=>{document.body.innerHTML='<pre>'+JSON.stringify(d,null,2)+'</pre>'});
+</script>
+</body>
+</html>
