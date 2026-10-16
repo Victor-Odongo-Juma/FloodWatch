@@ -1,43 +1,30 @@
-walker app {
-    can get / {
-        return {
-            "project": "FloodWatch - Tana River",
-            "status": "Active",
-            "message": "Flood Monitoring System is Running",
-            "location": "Garissa, Tana River County",
-            "endpoints": ["/", "/predict", "/alert", "/health"]
+
+walker:pub get_status {
+    can get_status with `root entry {
+        report {
+            "app": "FloodWatch Level 2",
+            "status": "SAFE",
+            "stations": [
+                {"name": "Garissa Town", "level": "7.0m", "status": "SAFE"},
+                {"name": "Tana River", "level": "6.5m", "status": "SAFE"},
+                {"name": "Nakuru", "level": "5.0m", "status": "SAFE"},
+                {"name": "Kano", "level": "4.0m", "status": "SAFE"}
+            ],
+            "message": "Monitoring 4 stations - 100% Jac!"
         };
     }
+}
 
-    can get /health {
-        return {"status": "ok", "service": "FloodWatch"};
+walker:pub health {
+    obj __specs__ {
+        static has methods: list = ["get"], auth: bool = False;
     }
+    can health with `root entry {
+        report {"status": "ok", "app": "FloodWatch"};
+    }
+}
 
-    can get /predict {
-        water_level = 3.2;
-        rainfall = 45.5;
-        if (water_level > 5.0) {
-            return {
-                "alert": "FLOOD WARNING",
-                "level": water_level,
-                "rainfall": rainfall,
-                "action": "Evacuate low areas, SMS sent"
-            };
-        } else {
-            return {
-                "alert": "Normal",
-                "level": water_level,
-                "rainfall": rainfall,
-                "action": "Monitoring continues"
-            };
-        }
-    }
-
-    can get /alert {
-        return {
-            "sms_status": "Ready",
-            "recipients": "Community leaders",
-            "system": "send_sms.py integrated"
-        };
-    }
+with entry {
+    print("=== FloodWatch Level 2 - New Jac Syntax ===");
+    print("Web server ready - API at /walker/get_status");
 }
