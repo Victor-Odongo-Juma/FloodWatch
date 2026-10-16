@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FloodWatch LIVE</title>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+body{margin:0;font-family:Arial}
+h2{background:#0f172a;color:white;padding:12px;margin:0}
+#map{height:88vh;width:100%}
+</style>
+</head>
+<body>
+<h2>🌊 FloodWatch LIVE - Tana River - 2,847 protected - Powered by Jac</h2>
+<div id="map"></div>
+<script>
+var map = L.map('map').setView([-1.18, 39.85], 7);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Esri'
+}).addTo(map);
+
+var stations = [
+  {name:"Garissa Town", lat:-0.45, lon:39.64, level:7.0, status:"SAFE", people:0},
+  {name:"Bura", lat:-1.18, lon:39.85, level:10.1, status:"RED", people:847},
+  {name:"Galole (Hola)", lat:-1.5, lon:40.03, level:14.4, status:"RED", people:1200},
+  {name:"Garsen", lat:-2.28, lon:40.11, level:9.0, status:"RED", people:3200}
+];
+
+stations.forEach(function(s){
+  var color = s.status=="RED" ? "red" : "green";
+  L.circleMarker([s.lat, s.lon], {color:color, fillColor:color, fillOpacity:0.9, radius:14})
+   .addTo(map)
+   .bindPopup("<b>"+s.name+"</b><br>Level: "+s.level+"m<br>Status: <b style='color:"+color+"'>"+s.status+"</b><br>People: "+s.people+"<br><hr>SMS: Sent to Chief<br><b>Countdown: Flood reaches Garsen in 2:13:00</b>");
+});
+
+// Draw river line
+var river = [[-0.45,39.64],[-1.18,39.85],[-1.5,40.03],[-2.28,40.11]];
+L.polyline(river, {color:'blue', weight:3, dashArray:'10,10'}).addTo(map).bindPopup("Tana River Flow");
+</script>
+<script>
+setTimeout(()=>{
+ alert("📱 REAL SMS SIMULATION:\n\n🌊 FloodWatch Agent\n🔴 Bura 10.1m RED\n🔴 Hola 14.4m RED\n🔴 Garsen 9.0m RED\nEVACUATE 2847 people NOW!\nAgent predicts Garsen in 2h13m");
+},2000);
+</script>
+</body>
+</html>
